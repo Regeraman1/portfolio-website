@@ -1,0 +1,12 @@
+body {
+    font-family:'Times New Roman', Times, serif;
+    background-color: darkblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+h1 {
+    color: white;
+}
