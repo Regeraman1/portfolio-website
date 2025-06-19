@@ -10,13 +10,10 @@ body {
 }
 
 h1 {
-    align-self: flex-start;
     color: white;
 }
 
 h3 {
     color: white;
     font-family:Georgia, 'Times New Roman', Times, serif;
-    align-self: flex-start;
-
 }
