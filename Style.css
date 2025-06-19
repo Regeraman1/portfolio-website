@@ -3,7 +3,7 @@ body {
     background-color: rgb(26, 112, 4);
     display: flex;
     justify-content: center;
-    align-items: top;
+    align-items: flex-start;
     height: 100vh;
     width: auto;
 }
@@ -15,6 +15,6 @@ h1 {
 h3 {
     color: white;
     font-family:Georgia, 'Times New Roman', Times, serif;
-    align-self: baseline;
+    align-self: flex-start;
 
 }
