@@ -9,6 +9,7 @@ body {
 }
 
 h1 {
+    align-self: flex-start;
     color: white;
 }
 
