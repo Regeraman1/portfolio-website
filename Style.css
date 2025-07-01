@@ -64,8 +64,8 @@ carousel-body {
     z-index: 1;
 }
 
-.carousel-btn.prev {
-    left: -10px;
+.carousel-btn.previous {
+    left: 10px;
 }
 
 .carousel-btn.next {
