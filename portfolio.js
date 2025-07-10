@@ -1,43 +1,61 @@
-const track = document.querySelector(".carousel-track");
-const previousBtn = document.querySelector(".carousel-btn.prev");
-const nextBtn = document.querySelector(".carousel-btn.next");
+const carousel = document.getElementById('carousel');
+const leftBtn = document.getElementById('left-btn');
+const rightBtn = document.getElementById('right-btn');
 
-let currentSlide = 0;
-const slides = document.querySelectorAll(".carousel-item");
-const totalSlides = slides.length;
-
-function updateCarousel() {
-    track.style.transform = `translateX(-${currentSlide * 100}$)`;
-}
-
-function nextSlide() {
-    currentslide = (currentSlide + 1) %  totalSlides;
-    updateCarousel();
-}
-
-function previousSlide() {
-    currentSllide = (currentSlide - 1 + totalSlides) % totalSlides;
-    updateCarousel();
-}
-
-function startAutoScroll() {
-    autoScrollInterval = setInterval(nextSlide, 5000);
-}
-
-function resetAutoScroll() {
-    clearInterval(autoScrollInterval);
-    startAutoScroll();
-}
-
-nextBtn.addEventListener("click", () => {
-    nextSlide();
-    resetAutoScroll();
+leftBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: -300, behavior: 'smooth' });
 });
 
-previousBtn.addEventListener("click", () => {
-    previousSlide();
-    resetAutoScroll();
+rightBtn.addEventListener('click', () => {
+    carousel.scrollBy({ left: 300, behavior: 'smooth' });
 });
 
-updateCarousel();
-startAutoScroll();
+let isDown = false;
+let startX;
+let scrollLeft;
+
+carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - carousel.offsetLeft;
+    scrollLeft = carousel.scrollLeft;
+    carousel.style.cursor = 'grabbing';
+});
+
+carousel.addEventListener('mouseleave', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+});
+
+carousel.addEventListener('mouseup', () => {
+    isDown = false;
+    carousel.style.cursor = 'grab';
+});
+
+carousel.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2;
+    carousel.scrollLeft = scrollLeft - walk;
+});
+
+let autoScrollInterval = setInterval(() => {
+    carousel.scrollBy({ left: 250, behavior: 'smooth'});
+    if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 1) {
+        setTimeout(() => {
+            carousel.scrollTo({ left: 0, behavior: 'smooth' });
+        }, 500);
+    }
+}, 4000);
+
+carousel.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
+carousel.addEventListener('mouseleave', () => {
+    autoScrollInterval = setInterval(() => {
+        carousel.scrollBy({ left: 250, behavior: 'smooth' });
+        if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 1) {
+            setTimeout(() => {
+                carousel.scrollTo({ left: 0, bheavior: 'smooth' });
+            }, 500);
+        }
+    }, 4000);
+});
