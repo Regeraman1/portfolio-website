@@ -2,6 +2,31 @@ const carousel = document.getElementById('carousel');
 const leftBtn = document.getElementById('left-btn');
 const rightBtn = document.getElementById('right-btn');
 
+let scrollSpeed = 0.5;
+let animationFrameId;
+
+function startAutoScroll() {
+    animationFrameId = requestAnimationFrame(autoScroll);
+}
+
+function autoScroll() {
+    carousel.scrollLeft += scrollSpeed;
+
+    if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 1) {
+        carousel.scrollLeft = 0;
+    }
+
+    animationFrameId = requestAnimationFrame(autoScroll);
+}
+
+carousel.addEventListener('mouseenter', () => {
+    cancelAnimationFrame(animationFrameId);
+});
+
+carousel.addEventListener('mouseleave', () => {
+    startAutoScroll();
+});
+
 leftBtn.addEventListener('click', () => {
     carousel.scrollBy({ left: -300, behavior: 'smooth' });
 });
@@ -19,6 +44,7 @@ carousel.addEventListener('mousedown', (e) => {
     startX = e.pageX - carousel.offsetLeft;
     scrollLeft = carousel.scrollLeft;
     carousel.style.cursor = 'grabbing';
+    cancelAnimationFrame(animationFrameId);
 });
 
 carousel.addEventListener('mouseleave', () => {
@@ -29,6 +55,7 @@ carousel.addEventListener('mouseleave', () => {
 carousel.addEventListener('mouseup', () => {
     isDown = false;
     carousel.style.cursor = 'grab';
+    startAutoScroll();
 });
 
 carousel.addEventListener('mousemove', (e) => {
@@ -39,23 +66,4 @@ carousel.addEventListener('mousemove', (e) => {
     carousel.scrollLeft = scrollLeft - walk;
 });
 
-let autoScrollInterval = setInterval(() => {
-    carousel.scrollBy({ left: 250, behavior: 'smooth'});
-    if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 1) {
-        setTimeout(() => {
-            carousel.scrollTo({ left: 0, behavior: 'smooth' });
-        }, 500);
-    }
-}, 4000);
-
-carousel.addEventListener('mouseenter', () => clearInterval(autoScrollInterval));
-carousel.addEventListener('mouseleave', () => {
-    autoScrollInterval = setInterval(() => {
-        carousel.scrollBy({ left: 250, behavior: 'smooth' });
-        if (carousel.scrollLeft + carousel.clientWidth >= carousel.scrollWidth - 1) {
-            setTimeout(() => {
-                carousel.scrollTo({ left: 0, bheavior: 'smooth' });
-            }, 500);
-        }
-    }, 4000);
-});
+startAutoScroll();
